@@ -7,12 +7,15 @@ import lombok.Getter;
 @Getter
 @Entity
 @Data
-@jakarta.persistence.Table(name = "academic_rank")
-public class AcademicRank {
+@jakarta.persistence.Table(name = "speciality")
+public class Speciality {
     @jakarta.persistence.Id
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "descr")
     private String descr;
+
+    @Column(name = "faculty")
+    private Integer faculty;
 }

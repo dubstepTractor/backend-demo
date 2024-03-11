@@ -71,6 +71,17 @@
 			<artifactId>jakarta.persistence-api</artifactId>
 			<version>3.0.0</version> <!-- Или более поздняя версия -->
 		</dependency>
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr</artifactId>
+			<version>3.5.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-tools</artifactId>
+			<version>5.4.32.Final</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

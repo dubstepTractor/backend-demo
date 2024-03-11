@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 @Entity
 @Data
-@jakarta.persistence.Table(name = "academic_rank")
-public class AcademicRank {
+@jakarta.persistence.Table(name = "discipline_type")
+public class DisciplineType {
     @jakarta.persistence.Id
     @Column(name = "id")
     private Integer id;

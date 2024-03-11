@@ -20,4 +20,8 @@ public class AcademicDegreeService {
     public List<AcademicDegree> getAll() {
         return academicDegreeRepo.findAll(); // Вызов метода findAll() репозитория
     }
+
+    public List<AcademicDegree> getByIdMore3() {
+        return academicDegreeRepo.findAllIdMore3();
+    }
 }
