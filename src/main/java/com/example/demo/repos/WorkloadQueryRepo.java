@@ -1,0 +1,18 @@
+package com.example.demo.repos;
+
+import com.example.demo.models.WorkloadQuery;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface WorkloadQueryRepo extends JpaRepository<WorkloadQuery, Integer> {
+    @Query(value = "SELECT study_year.study_year, workload.id, study_form.descr_rus AS study_Form, qualification.descr AS qualification_Descr, discipline.descr, speciality.descr AS speciality_Descr, faculty.descr AS faculty_Descr, semester.descr AS semester_Descr, students_group.student_count, semester.week_count, discipline.lecture_count, discipline.practice_count, discipline.lab_count, discipline.ekz, discipline.zach, discipline.rgr, discipline.kr, discipline.kp, discipline.uch_pr, discipline.pr_pr, discipline.pred_dip_pr, discipline.kons_zaoch, discipline.gek, discipline.gak, discipline.gak_pred, discipline.dp_ruk, discipline.dopusk_vkr, discipline.retz_vkr, discipline.dp_retz, discipline.asp_ruk, discipline.mag_ruk, discipline.mag_retz, discipline.ruk_kaf, discipline.niir, discipline.is_special, students_group.subgroup_count, discipline.contr, workload_assign.teacher FROM (study_year INNER JOIN (study_form INNER JOIN ((faculty INNER JOIN speciality ON faculty.id = speciality.faculty) INNER JOIN (semester INNER JOIN (qualification INNER JOIN (discipline INNER JOIN (workload INNER JOIN students_group ON workload.group = students_group.id) ON discipline.id = workload.discipline) ON qualification.id = students_group.qualification) ON semester.id = Workload.semester) ON Speciality.ID = students_group.speciality) ON study_form.id = students_group.study_form) ON study_year.id = workload.study_year) INNER JOIN workload_assign ON workload.id = workload_assign.workload WHERE (((study_year.study_year) = :yearValue))", nativeQuery = true)
+    List<WorkloadQuery> findWorkloadByYear(@Param("yearValue") Integer yearValue);
+
+    @Query(value = "SELECT study_year.study_year, workload.id, study_form.id AS Expr2, qualification.id AS Expr1, discipline.descr, speciality.descr AS Expr4, faculty.descr AS Expr3, semester.descr AS Expr5, students_group.student_count, semester.week_count, discipline.lecture_count, discipline.practice_count, discipline.lab_count, discipline.ekz, discipline.zach, discipline.rgr, discipline.kr, discipline.kp, discipline.uch_pr, discipline.pr_pr, discipline.pred_dip_pr, discipline.kons_zaoch, discipline.gek, discipline.gak, discipline.gak_pred, discipline.dp_ruk, discipline.dopusk_vkr, discipline.retz_vkr, discipline.dp_retz, discipline.asp_ruk, discipline.mag_ruk, discipline.mag_retz, discipline.ruk_kaf, discipline.niir, discipline.is_special, students_group.subgroup_count, discipline.contr, workload_assign.teacher FROM (study_year INNER JOIN (study_form INNER JOIN ((faculty INNER JOIN speciality ON faculty.id = speciality.faculty) INNER JOIN (semester INNER JOIN (qualification INNER JOIN (discipline INNER JOIN (workload INNER JOIN students_group ON workload.group = students_group.id) ON discipline.id = workload.discipline) ON qualification.id = students_group.qualification) ON semester.id = Workload.semester) ON Speciality.ID = students_group.speciality) ON study_form.id = students_group.study_form) ON study_year.id = workload.study_year) INNER JOIN workload_assign ON workload.id = workload_assign.workload WHERE (((study_year.study_year) = :yearValue) AND ((workload_assign.teacher) = :id))", nativeQuery = true)
+    List<WorkloadQuery> findWorkloadEmployByYear(@Param("yearValue") Integer yearValue, @Param("id") Integer id);
+}
