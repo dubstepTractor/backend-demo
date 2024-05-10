@@ -38,9 +38,8 @@ public class WorkloadExcelProcessor {
     }
 
     public static Workbook createReportWorkload(Map<String, List<WorkloadQuery>> mapWorkLoad) throws IOException {
-
         // Получение полного пути к файлу шаблона
-        File templateFile = new File("src/main/java/com/example/demo/helpers/workload/templates/WorkloadTemplate.xlsx");
+        File templateFile = new File("src/main/java/com/example/demo/helpers/templates/WorkloadTemplate.xlsx");
         return createReport(templateFile, mapWorkLoad);
     }
 
@@ -63,8 +62,6 @@ public class WorkloadExcelProcessor {
                 // Заменяем данные на листе копии
                 replaceDataInSheet(teacherSheet, workloadQueries, sheetName);
             }
-
-            System.out.println("Листы успешно созданы в копии файла Excel.");
             workbook.removeSheetAt(0);
             workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
             return workbook;
