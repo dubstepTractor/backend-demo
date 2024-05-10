@@ -18,4 +18,7 @@ public class EmployeeService {
         return employeeRepo.findAll();
     }
 
+    public Employee getById(Integer id) {
+        return employeeRepo.findEmployeeById(id);
+    }
 }
