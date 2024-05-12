@@ -1,48 +1,36 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.PlanQuery;
 import com.example.demo.models.WorkloadQuery;
-import com.example.demo.services.PlanQueryService;
 import com.example.demo.services.WorkloadQueryService;
-import org.springframework.http.HttpStatus;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.poi.ss.usermodel.*;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.util.List;
 
 import static com.example.demo.helpers.WorkbookHelpers.convertWorkbookToByteArray;
-import static com.example.demo.helpers.plan.PlanExcelProcessor.createReportPlan;
+import static com.example.demo.helpers.semester.SemesterExcelProcessor.createSemesterReport;
 
 @RestController
-@RequestMapping("/api/report/ind-plan")
-public class IndPlanReportController {
+@RequestMapping("/api/report/semester")
+public class SemesterReportController {
     private final WorkloadQueryService workloadQueryService;
-    private final PlanQueryService planQueryService;
 
-    public IndPlanReportController(WorkloadQueryService workloadQueryService, PlanQueryService planQueryService) {
+    public SemesterReportController(WorkloadQueryService workloadQueryService) {
         this.workloadQueryService = workloadQueryService;
-        this.planQueryService = planQueryService;
-    }
-
-    @GetMapping("/data")
-    public ResponseEntity<List<WorkloadQuery>> getWorkloadByYear(@RequestParam(required = true) Integer year, @RequestParam(required = true) Integer id) {
-        List<WorkloadQuery> data = workloadQueryService.getWorkloadEmployByYear(year, id);
-        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @GetMapping("/file")
-    public ResponseEntity<ByteArrayResource> getFile(@RequestParam(required = true) Integer year, @RequestParam(required = true) Integer id) throws IOException {
-        List<WorkloadQuery> dataIndPlan = workloadQueryService.getWorkloadEmployByYear(year, id);
-        PlanQuery employee = planQueryService.getEmployee(id);
-        Workbook workbook = createReportPlan(employee, dataIndPlan);
+    public ResponseEntity<ByteArrayResource> getFile(@RequestParam(required = true) Integer year, @RequestParam(required = true) Boolean isAutumn) throws IOException {
+        List<WorkloadQuery> dataWorkLoad = workloadQueryService.getWorkloadByYear(year);
+        Workbook workbook = createSemesterReport(dataWorkLoad, isAutumn);
 
         // Преобразуем книгу в массив байтов
         byte[] excelBytes = convertWorkbookToByteArray(workbook);
@@ -52,7 +40,7 @@ public class IndPlanReportController {
 
         // Устанавливаем заголовки для ответа
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Plan" + year + ".xlsx");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Semester" + year + ".xlsx");
 
         // Возвращаем ответ с содержимым книги Excel
         return ResponseEntity.ok()
