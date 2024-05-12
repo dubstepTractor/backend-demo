@@ -46,7 +46,7 @@ public class WorkloadReportController {
     }
 
     @GetMapping("/file")
-    public ResponseEntity<ByteArrayResource> getEmptyFile(@RequestParam(required = true) Integer year) throws IOException {
+    public ResponseEntity<ByteArrayResource> getFile(@RequestParam(required = true) Integer year) throws IOException {
         List<WorkloadQuery> dataWorkLoad = workloadQueryService.getWorkloadByYear(year);
         List<Employee> employees = employeeService.getAll();
         Map<String, List<WorkloadQuery>> mapWorkLoad = disassembleData(dataWorkLoad, employees);

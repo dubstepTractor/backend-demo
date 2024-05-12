@@ -46,6 +46,16 @@ public class WorkloadQuery {
     private Boolean contr;
     private Integer teacher;
 
+    private Boolean isContract;
+
+    public Boolean getContract() {
+        return isContract;
+    }
+
+    public void setContract(Boolean contract) {
+        isContract = contract;
+    }
+
     public Integer getSemesterDescr() {
         return semesterDescr;
     }
