@@ -17,4 +17,28 @@ public class StudentsGroupService {
     public List<StudentsGroup> getAll() {
         return studentsGroupRepo.findAll();
     }
+
+    public Integer add(StudentsGroup newGroup) {
+        studentsGroupRepo.save(newGroup);
+        return newGroup.getId();
+    }
+
+    public Integer findIdByYearB(Integer year) {
+        List<StudentsGroup> groups = getAll();
+        for (StudentsGroup group : groups) {
+            if (group.getEntryYear().equals(year) && group.getQualification().equals(1)) {
+                return group.getId();
+            }
+        }
+        return -1;
+    }
+    public Integer findIdByYearM(Integer year) {
+        List<StudentsGroup> groups = getAll();
+        for (StudentsGroup group : groups) {
+            if (group.getEntryYear().equals(year) && group.getQualification().equals(3)) {
+                return group.getId();
+            }
+        }
+        return -1;
+    }
 }

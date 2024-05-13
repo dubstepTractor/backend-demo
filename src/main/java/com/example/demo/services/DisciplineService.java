@@ -17,4 +17,9 @@ public class DisciplineService {
     public List<Discipline> getAll() {
         return disciplineRepo.findAll(); // Вызов метода findAll() репозитория
     }
+
+    public Integer add(Discipline newDiscipline) {
+        disciplineRepo.save(newDiscipline);
+       return newDiscipline.getId();
+    }
 }

@@ -17,4 +17,9 @@ public class WorkloadService {
     public List<Workload> getAll() {
         return workloadRepo.findAll();
     }
+
+    public Integer add(Workload newWorkload) {
+        workloadRepo.save(newWorkload);
+        return newWorkload.getId();
+    }
 }
