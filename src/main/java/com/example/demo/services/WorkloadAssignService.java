@@ -17,4 +17,9 @@ public class WorkloadAssignService {
     public List<WorkloadAssign> getAll() {
         return workloadAssignRepo.findAll();
     }
+
+    public Integer add(WorkloadAssign newWorkloadAssign) {
+        workloadAssignRepo.save(newWorkloadAssign);
+        return newWorkloadAssign.getId();
+    }
 }

@@ -1,14 +1,23 @@
 package com.example.demo.helpers;
 
+import com.example.demo.helpers.writer.InputFile;
 import com.example.demo.models.WorkloadQuery;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WorkbookHelpers {
+    public static Workbook multipartFileToWorkbook(MultipartFile file) throws IOException {
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(file.getBytes())) {
+            return WorkbookFactory.create(bis);
+        }
+    }
+
     public static byte[] convertWorkbookToByteArray(Workbook workbook) throws IOException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             workbook.write(outputStream);
@@ -230,5 +239,21 @@ public class WorkbookHelpers {
         res += workload.getGak() ? (double) 0.5 * workload.getStudentCount() * 5 : 0;
         res += workload.getGakPred() ? (double) 0.25 * workload.getStudentCount() : 0;
         return res;
+    }
+    public static Integer findCountStudent(List<InputFile> list, Integer semester){
+        for (InputFile data : list){
+            if(data.getSemesterDescr()==semester){
+                return data.getStudentCount();
+            }
+        }
+        return -1;
+    }
+    public static Integer findSubGroupCount(List<InputFile> list, Integer semester){
+        for (InputFile data : list){
+            if(data.getSemesterDescr()==semester){
+                return data.getSubGroupCount();
+            }
+        }
+        return -1;
     }
 }
