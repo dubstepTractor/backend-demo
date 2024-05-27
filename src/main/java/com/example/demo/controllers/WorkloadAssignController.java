@@ -19,7 +19,7 @@ public class WorkloadAssignController {
         this.workloadAssignService = workloadAssignService;
     }
 
-    @GetMapping("/workload-assign")
+    @GetMapping("/workload_assign")
     public ResponseEntity<List<WorkloadAssign>> getDisciplines() {
         List<WorkloadAssign> data = workloadAssignService.getAll();
         return new ResponseEntity<>(data, HttpStatus.OK);

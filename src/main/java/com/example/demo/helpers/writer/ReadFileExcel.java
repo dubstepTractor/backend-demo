@@ -11,12 +11,12 @@ import static org.apache.poi.ss.usermodel.CellType.*;
 
 public class ReadFileExcel {
 
-    public static List<InputFile> readFile(String filePath, List<Employee> employee, Integer year) throws Exception {
-        // Создайте объект для чтения файла Excel
-        FileInputStream fis = new FileInputStream(new File(filePath));
-
-        // Создайте объект для рабочей книги (Workbook)
-        Workbook workbook = WorkbookFactory.create(fis);
+    public static List<InputFile> readFile(Workbook workbook, List<Employee> employee, Integer year) throws Exception {
+//        // Создайте объект для чтения файла Excel
+//        FileInputStream fis = new FileInputStream(new File(filePath));
+//
+//        // Создайте объект для рабочей книги (Workbook)
+//        Workbook workbook = WorkbookFactory.create(fis);
 
         // Получите первый лист из книги
         Sheet sheet = workbook.getSheetAt(0);

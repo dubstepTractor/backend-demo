@@ -1,8 +1,9 @@
 package com.example.demo.helpers.writer;
 
+import com.example.demo.helpers.deleteYear.DeleteFromDataBase;
 import com.example.demo.models.*;
 import com.example.demo.services.*;
-import org.apache.poi.ss.formula.atp.Switch;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public class WriteDataBase {
     final WorkloadService workloadService;
     final WorkloadAssignService workloadAssignService;
     final EmployeeService employeeService;
+    final DeleteFromDataBase deleteFromDataBase;
 
     Integer idNewYear = -1;
     Integer idNewGroupB = -1;
@@ -28,16 +30,17 @@ public class WriteDataBase {
     Map<Integer, Integer> idsNewWorkload = new HashMap<>();
     List<Integer> getIdsNewWorkloadAssign = new ArrayList<Integer>();
 
-    public WriteDataBase(StudyYearService studyYearService, StudentsGroupService studentsGroupService, DisciplineService disciplineService, WorkloadService workloadService, WorkloadAssignService workloadAssignService, EmployeeService employeeService) {
+    public WriteDataBase(StudyYearService studyYearService, StudentsGroupService studentsGroupService, DisciplineService disciplineService, WorkloadService workloadService, WorkloadAssignService workloadAssignService, EmployeeService employeeService, DeleteDataService deleteDataService) {
         this.studyYearService = studyYearService;
         this.studentsGroupService = studentsGroupService;
         this.disciplineService = disciplineService;
         this.workloadService = workloadService;
         this.workloadAssignService = workloadAssignService;
         this.employeeService = employeeService;
+        deleteFromDataBase = new DeleteFromDataBase(studyYearService,studentsGroupService,disciplineService,workloadService,workloadAssignService,deleteDataService);
     }
 
-    public void fillDataBase(String filePath, Integer year) throws Exception {
+    public void fillDataBase(Workbook workbook, Integer year) throws Exception {
         idNewYear = -1;
         idNewGroupB = -1;
         idNewGroupM = -1;
@@ -45,7 +48,8 @@ public class WriteDataBase {
         idsNewWorkload = new HashMap<>();
         List<Integer> getIdsNewWorkloadAssign = new ArrayList<Integer>();
         List<Employee> employees = employeeService.getAll();
-        List<InputFile> listValue = readFile(filePath, employees, year);
+//        List<InputFile> listValue = readFile(filePath, employees, year);
+        List<InputFile> listValue = readFile(workbook, employees, year);
         try {
             //Заполнение нового учебного года
             fillYear(year);
@@ -58,6 +62,7 @@ public class WriteDataBase {
             //Добавление WorkloadAssign
             fillWorkloadAssign(listValue);
         } catch (Exception ex) {
+            deleteFromDataBase.DeleteYear(idNewYear);
             throw new Exception(ex.getMessage());
         }
     }
@@ -146,7 +151,6 @@ public class WriteDataBase {
         }
         StudyYear newYear = new StudyYear(year);
         idNewYear = studyYearService.add(newYear);
-        System.out.println("idNewYear " + idNewYear);
         if (idNewYear == -1) {
             throw new Exception("Ошибка при добавлении нового учебного года");
         }

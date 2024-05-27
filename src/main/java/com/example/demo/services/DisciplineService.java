@@ -20,6 +20,10 @@ public class DisciplineService {
 
     public Integer add(Discipline newDiscipline) {
         disciplineRepo.save(newDiscipline);
-       return newDiscipline.getId();
+        return newDiscipline.getId();
+    }
+
+    public void delete(Integer id) {
+        disciplineRepo.deleteById(id);
     }
 }
