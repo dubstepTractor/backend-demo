@@ -22,4 +22,8 @@ public class WorkloadAssignService {
         workloadAssignRepo.save(newWorkloadAssign);
         return newWorkloadAssign.getId();
     }
+
+    public void delete(Integer id) {
+        workloadAssignRepo.deleteById(id);
+    }
 }

@@ -41,4 +41,8 @@ public class StudentsGroupService {
         }
         return -1;
     }
+
+    public void delete(Integer id) {
+        studentsGroupRepo.deleteById(id);
+    }
 }

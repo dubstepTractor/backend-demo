@@ -95,6 +95,9 @@ public class WorkloadExcelProcessor {
                     }
                 }
                 Cell cellGroup = row.getCell(8);
+                if(cellGroup==null){
+                    cellGroup = row.createCell(8);
+                }
                 cellGroup.setCellValue(1);
             }
             numRow++;

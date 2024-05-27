@@ -32,4 +32,18 @@ public class StudyYearService {
         }
         return -1;
     }
+    public void delete(Integer id) {
+        studyYearRepo.deleteById(id);
+    }
+
+    public StudyYear getMaxYear(){
+        List<StudyYear> years = getAll();
+        StudyYear maxYear = years.get(0);
+        for (StudyYear year : years) {
+            if (maxYear.getStudyYear() < year.getStudyYear()) {
+                maxYear = year;
+            }
+        }
+        return maxYear;
+    }
 }

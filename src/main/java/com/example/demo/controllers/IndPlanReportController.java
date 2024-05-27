@@ -33,7 +33,7 @@ public class IndPlanReportController {
     }
 
     @GetMapping("/data")
-    public ResponseEntity<List<WorkloadQuery>> getWorkloadByYear(@RequestParam(required = true) Integer year, @RequestParam(required = true) Integer id) {
+    public ResponseEntity<List<WorkloadQuery>> getPlanByYear(@RequestParam(required = true) Integer year, @RequestParam(required = true) Integer id) {
         List<WorkloadQuery> data = workloadQueryService.getWorkloadEmployByYear(year, id);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
