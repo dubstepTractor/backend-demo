@@ -16,8 +16,8 @@ public class FillDataBaseController {
     private final WriteDataBase writeDataBase;
 
 
-    public FillDataBaseController(StudyYearService studyYearService, StudentsGroupService studentsGroupService, DisciplineService disciplineService, WorkloadService workloadService, WorkloadAssignService workloadAssignService, EmployeeService employeeService, DeleteDataService deleteDataService) {
-        writeDataBase = new WriteDataBase(studyYearService, studentsGroupService, disciplineService, workloadService, workloadAssignService, employeeService, deleteDataService);
+    public FillDataBaseController(StudyYearService studyYearService, StudentsGroupService studentsGroupService, DisciplineService disciplineService, WorkloadService workloadService, WorkloadAssignService workloadAssignService, EmployeeService employeeService, DeleteDataService deleteDataService, SpecialityService specialityService) {
+        writeDataBase = new WriteDataBase(studyYearService, studentsGroupService, disciplineService, workloadService, workloadAssignService, employeeService, deleteDataService, specialityService);
     }
 
     @PostMapping("/fill")

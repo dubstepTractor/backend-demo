@@ -14,10 +14,6 @@ public class DeleteDataService {
     }
 
     public List<DeleteData> getAll(Integer idYear) {
-        List<DeleteData> data = deleteDataRepo.findDeleteDataByYear(idYear);
-        for(DeleteData d : data){
-            System.out.println(d.getIdWorkload());
-        }
         return deleteDataRepo.findDeleteDataByYear(idYear);
     }
 }

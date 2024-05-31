@@ -5,6 +5,7 @@ import com.example.demo.repos.StudentsGroupRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentsGroupService {
@@ -23,19 +24,10 @@ public class StudentsGroupService {
         return newGroup.getId();
     }
 
-    public Integer findIdByYearB(Integer year) {
+    public Integer findIdByYear(Integer year, Integer idSpeciality) {
         List<StudentsGroup> groups = getAll();
         for (StudentsGroup group : groups) {
-            if (group.getEntryYear().equals(year) && group.getQualification().equals(1)) {
-                return group.getId();
-            }
-        }
-        return -1;
-    }
-    public Integer findIdByYearM(Integer year) {
-        List<StudentsGroup> groups = getAll();
-        for (StudentsGroup group : groups) {
-            if (group.getEntryYear().equals(year) && group.getQualification().equals(3)) {
+            if (group.getEntryYear().equals(year) && group.getSpeciality().equals(idSpeciality)) {
                 return group.getId();
             }
         }
@@ -44,5 +36,25 @@ public class StudentsGroupService {
 
     public void delete(Integer id) {
         studentsGroupRepo.deleteById(id);
+    }
+
+    public void updateField(Integer studentsCount, Integer countSubGroup, Integer year, Integer idSpeciality) {
+        Integer id = findIdByYear(year, idSpeciality);
+        Optional<StudentsGroup> optionalEntity = studentsGroupRepo.findById(id);
+        if (optionalEntity.isPresent()) {
+            StudentsGroup group = optionalEntity.get();
+            Boolean flag = false;
+            if (!group.getStudentCount().equals(studentsCount)) {
+                group.setStudentCount(studentsCount);
+                flag = true;
+            }
+            if (!group.getSubgroupCount().equals(countSubGroup)) {
+                group.setSubgroupCount(countSubGroup);
+                flag = true;
+            }
+            if (flag) {
+                studentsGroupRepo.save(group);
+            }
+        }
     }
 }
