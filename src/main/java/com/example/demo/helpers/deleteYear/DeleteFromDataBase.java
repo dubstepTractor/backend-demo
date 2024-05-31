@@ -28,15 +28,16 @@ public class DeleteFromDataBase {
     public void DeleteYear(Integer idYear) throws Exception {
         List<DeleteData> deleteData = getDataDelete(idYear);
         for (DeleteData data : deleteData) {
-            System.out.println(data.getIdWorkloadAssign());
             workloadAssignService.delete(data.getIdWorkloadAssign());
             workloadService.delete(data.getIdWorkload());
             disciplineService.delete(data.getIdDiscipline());
         }
-        Integer idGroupB = studentsGroupService.findIdByYearB(idYear);
-        Integer idGroupM = studentsGroupService.findIdByYearM(idYear);
+        Integer idGroupB = studentsGroupService.findIdByYear(idYear, 2);
+        Integer idGroupM = studentsGroupService.findIdByYear(idYear,1);
+        Integer idGroupBI = studentsGroupService.findIdByYear(idYear, 7);
         studentsGroupService.delete(idGroupB);
         studentsGroupService.delete(idGroupM);
+        studyYearService.delete(idGroupBI);
         studyYearService.delete(idYear);
     }
 

@@ -240,17 +240,17 @@ public class WorkbookHelpers {
         res += workload.getGakPred() ? (double) 0.25 * workload.getStudentCount() : 0;
         return res;
     }
-    public static Integer findCountStudent(List<InputFile> list, Integer semester){
+    public static Integer findCountStudent(List<InputFile> list, Integer semester, Integer idSpeciality){
         for (InputFile data : list){
-            if(data.getSemesterDescr()==semester){
+            if(data.getSemesterDescr().equals(semester) && data.getIdSpeciality().equals(idSpeciality)){
                 return data.getStudentCount();
             }
         }
         return -1;
     }
-    public static Integer findSubGroupCount(List<InputFile> list, Integer semester){
+    public static Integer findSubGroupCount(List<InputFile> list, Integer semester, Integer idSpeciality){
         for (InputFile data : list){
-            if(data.getSemesterDescr()==semester){
+            if(data.getSemesterDescr().equals(semester) && data.getIdSpeciality().equals(idSpeciality)){
                 return data.getSubGroupCount();
             }
         }

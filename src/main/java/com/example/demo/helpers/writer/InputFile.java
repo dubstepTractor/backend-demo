@@ -3,6 +3,7 @@ package com.example.demo.helpers.writer;
 
 public class InputFile {
     public String Descr;
+    public Integer idSpeciality;
     public String Department;
     public Integer Employee;
     public Boolean IsContract;
@@ -18,10 +19,13 @@ public class InputFile {
     public Boolean Zach;
     public Boolean KrR;
     public Boolean Cons;
-    public Boolean Pract;
+    public Integer UcPract;
+    public Integer PrPract;
+    public Integer PredDPract;
 
     public InputFile() {
         Descr = "";
+        idSpeciality = -1;
         Department = "";
         Employee = -1;
         IsContract = false;
@@ -37,11 +41,14 @@ public class InputFile {
         Zach = false;
         KrR = false;
         Cons = false;
-        Pract = false;
+        UcPract = 0;
+        PrPract = 0;
+        PredDPract = 0;
     }
 
-    public InputFile(String descr, String department, Integer employee, Boolean isContract, Integer studentCount, Integer subGroupCount, Integer semesterDescr, Integer lectureCount, Integer practiceCount, Integer labCount, Boolean KR, Boolean KP, Boolean ekz, Boolean zach, Boolean krR, Boolean cons, Boolean pract) {
+    public InputFile(String descr, Integer idSpeciality, String department, Integer employee, Boolean isContract, Integer studentCount, Integer subGroupCount, Integer semesterDescr, Integer lectureCount, Integer practiceCount, Integer labCount, Boolean KR, Boolean KP, Boolean ekz, Boolean zach, Boolean krR, Boolean cons, Integer pract, Integer prPract, Integer predDPract) {
         Descr = descr;
+        this.idSpeciality = idSpeciality;
         Department = department;
         Employee = employee;
         IsContract = isContract;
@@ -57,7 +64,33 @@ public class InputFile {
         Zach = zach;
         KrR = krR;
         Cons = cons;
-        Pract = pract;
+        UcPract = pract;
+        PrPract = prPract;
+        PredDPract = predDPract;
+    }
+
+    public Integer getPrPract() {
+        return PrPract;
+    }
+
+    public void setPrPract(Integer prPract) {
+        PrPract = prPract;
+    }
+
+    public Integer getPredDPract() {
+        return PredDPract;
+    }
+
+    public void setPredDPract(Integer predDPract) {
+        PredDPract = predDPract;
+    }
+
+    public Integer getIdSpeciality() {
+        return idSpeciality;
+    }
+
+    public void setIdSpeciality(Integer idSpeciality) {
+        this.idSpeciality = idSpeciality;
     }
 
     public Integer getSubGroupCount() {
@@ -188,11 +221,11 @@ public class InputFile {
         Cons = cons;
     }
 
-    public Boolean getPract() {
-        return Pract;
+    public Integer getUcPract() {
+        return UcPract;
     }
 
-    public void setPract(Boolean pract) {
-        Pract = pract;
+    public void setUcPract(Integer ucPract) {
+        UcPract = ucPract;
     }
 }

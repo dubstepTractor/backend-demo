@@ -143,7 +143,7 @@ public class Discipline {
         this.contr = contr;
     }
 
-    public Discipline(String descr, Integer lectureCount, Integer practiceCount, Integer labCount, Boolean kr, Boolean kp, Boolean zach, Boolean ekz, Boolean kons, Boolean contr) {
+    public Discipline(String descr, Integer lectureCount, Integer practiceCount, Integer labCount, Boolean kr, Boolean kp, Boolean zach, Boolean ekz, Boolean kons, Boolean contr, Integer uchPr, Integer prPr, Integer predDipPr) {
         this.descr = descr;
         department = 1;
         disciplineType = 1;
@@ -157,9 +157,9 @@ public class Discipline {
         this.kons = kons;
         this.contr = contr;
         this.rgr = false;
-        this.uchPr = 0;
-        this.prPr = 0;
-        this.predDipPr = 0;
+        this.uchPr = uchPr;
+        this.prPr = prPr;
+        this.predDipPr = predDipPr;
         this.niir = 0;
         this.konsZaoch = false;
         this.gek = false;

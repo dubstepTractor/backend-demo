@@ -37,13 +37,13 @@ public class WorkloadExcelProcessor {
         return "";
     }
 
-    public static Workbook createReportWorkload(Map<String, List<WorkloadQuery>> mapWorkLoad) throws IOException {
+    public static Workbook createReportWorkload(Map<String, List<WorkloadQuery>> mapWorkLoad, List<WorkloadQuery> data) throws IOException {
         // Получение полного пути к файлу шаблона
         File templateFile = new File("src/main/java/com/example/demo/helpers/templates/WorkloadTemplate.xlsx");
-        return createReport(templateFile, mapWorkLoad);
+        return createReport(templateFile, mapWorkLoad, data);
     }
 
-    private static Workbook createReport(File templateFile, Map<String, List<WorkloadQuery>> mapWorkLoad) throws IOException {
+    private static Workbook createReport(File templateFile, Map<String, List<WorkloadQuery>> mapWorkLoad, List<WorkloadQuery> allData) throws IOException {
         try {
             // Загрузка шаблонного файла Excel
             FileInputStream fis = new FileInputStream(templateFile);
@@ -62,6 +62,16 @@ public class WorkloadExcelProcessor {
                 // Заменяем данные на листе копии
                 replaceDataInSheet(teacherSheet, workloadQueries, sheetName);
             }
+            //вставляем список всех бакалавров
+            Sheet BSheet = workbook.cloneSheet(0);
+            workbook.setSheetName(workbook.getSheetIndex(BSheet), "Бакалавры");
+            replaceAllDataInSheet(BSheet, allData, "Бакалавры", true);
+
+            //вставляем список всех магистров
+            Sheet MSheet = workbook.cloneSheet(0);
+            workbook.setSheetName(workbook.getSheetIndex(MSheet), "Магистры");
+            replaceAllDataInSheet(MSheet, allData, "Магистры", false);
+
             workbook.removeSheetAt(0);
             workbook.getCreationHelper().createFormulaEvaluator().evaluateAll();
             return workbook;
@@ -73,6 +83,63 @@ public class WorkloadExcelProcessor {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static void replaceAllDataInSheet(Sheet teacherSheet, List<WorkloadQuery> workloadQueries, String sheetName, Boolean isBac) throws NoSuchFieldException, IllegalAccessException {
+        int numRow = 5;
+        int count = 1;
+        Map<Integer, String> cells = createCells();
+        for (WorkloadQuery res : workloadQueries) {
+            if ((res.getSemesterDescr() < 9) == isBac) {
+                Row row = teacherSheet.getRow(numRow);
+                if (row != null) {
+                    for (Map.Entry<Integer, String> currCell : cells.entrySet()) {
+                        Integer numCell = currCell.getKey();
+                        String valCell = currCell.getValue();
+                        Cell cell = row.getCell(numCell);
+                        if (cell != null) {
+                            if (numCell == 0) {
+                                cell.setCellValue(count);
+                                continue;
+                            }
+                            writeValueInCell(cell, valCell, res);
+                        }
+                    }
+                    Cell cellGroup = row.getCell(8);
+                    if (cellGroup == null) {
+                        cellGroup = row.createCell(8);
+                    }
+                    cellGroup.setCellValue(1);
+                    if (res.getPrPr() > 0 || res.getPredDipPr() > 0 || res.getUchPr() > 0) {
+                        Cell weekCount = row.getCell(7);
+                        if (weekCount == null) {
+                            weekCount = row.createCell(7);
+                        }
+                        if (res.getQualificationDescr().contains("B")) {
+                            weekCount.setCellValue(6);
+                        } else {
+                            if(res.getUchPr() > 0){
+                                weekCount.setCellValue(6);
+                            }
+                            else {
+                                weekCount.setCellValue(4);
+                            }
+                        }
+                    }
+                }
+                numRow++;
+                count++;
+            }
+        }
+        Row rowName = teacherSheet.getRow(3);
+        Cell cellName = rowName.getCell(57);
+        cellName.setCellValue(sheetName);
+
+        Row rowYear = teacherSheet.getRow(0);
+        Cell cellYear = rowYear.getCell(16);
+        Integer year = workloadQueries.get(0).getStudyYear();
+        Integer nextYear = year + 1;
+        cellYear.setCellValue(year + "/" + nextYear);
     }
 
     private static void replaceDataInSheet(Sheet teacherSheet, List<WorkloadQuery> workloadQueries, String sheetName) throws NoSuchFieldException, IllegalAccessException {
@@ -95,10 +162,21 @@ public class WorkloadExcelProcessor {
                     }
                 }
                 Cell cellGroup = row.getCell(8);
-                if(cellGroup==null){
+                if (cellGroup == null) {
                     cellGroup = row.createCell(8);
                 }
                 cellGroup.setCellValue(1);
+                if (res.getPrPr() > 0 || res.getPredDipPr() > 0 || res.getUchPr() > 0) {
+                    Cell weekCount = row.getCell(7);
+                    if (weekCount == null) {
+                        weekCount = row.createCell(7);
+                    }
+                    if (res.getQualificationDescr().contains("B")) {
+                        weekCount.setCellValue(6);
+                    } else {
+                        weekCount.setCellValue(4);
+                    }
+                }
             }
             numRow++;
             count++;

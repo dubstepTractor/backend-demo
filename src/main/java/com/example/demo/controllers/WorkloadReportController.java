@@ -50,7 +50,7 @@ public class WorkloadReportController {
         List<WorkloadQuery> dataWorkLoad = workloadQueryService.getWorkloadByYear(year);
         List<Employee> employees = employeeService.getAll();
         Map<String, List<WorkloadQuery>> mapWorkLoad = disassembleData(dataWorkLoad, employees);
-        Workbook workbook = createReportWorkload(mapWorkLoad);
+        Workbook workbook = createReportWorkload(mapWorkLoad, dataWorkLoad);
 
         // Преобразуем книгу в массив байтов
         byte[] excelBytes = convertWorkbookToByteArray(workbook);
