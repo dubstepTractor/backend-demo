@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.helpers.WorkbookHelpers.*;
@@ -25,23 +26,24 @@ public class PlanExcelProcessor {
             FileInputStream fis = new FileInputStream(templateFile);
             Workbook workbook = WorkbookFactory.create(fis); // Автоматическое определение формата (xls или xlsx)
             fis.close();
+            List<WorkloadQuery> newWorkload = checkWorkload(workload);
             for (int i = 0; i < 6; i++) {
                 Sheet sheet = workbook.getSheetAt(i);
                 switch (i) {
                     case 0:
-                        GenerateTitle(sheet, teacher, workload.get(0).getStudyYear());
+                        GenerateTitle(sheet, teacher, newWorkload.get(0).getStudyYear());
                         break;
                     case 1:
-                        GenerateSemester(sheet, workload, true);
+                        GenerateSemester(sheet, newWorkload, true);
                         break;
                     case 2:
-                        GenerateSemester(sheet, workload, false);
+                        GenerateSemester(sheet, newWorkload, false);
                         break;
                     case 3:
-                        GenerateLaborCosts(sheet, workload, true);
+                        GenerateLaborCosts(sheet, newWorkload, true);
                         break;
                     case 4:
-                        GenerateLaborCosts(sheet, workload, false);
+                        GenerateLaborCosts(sheet, newWorkload, false);
                         break;
                     default:
                         break;
@@ -75,8 +77,19 @@ public class PlanExcelProcessor {
         for (WorkloadQuery data : workload) {
             if (IsAutumnSemester(data.getSemesterDescr()) == IsAutumnSemester) {
                 setCellSheet(sheet, numRow, 2, data.getDescr().replaceAll("\"", ""));
-                String col2 = data.getFacultyDescr() + "," + getCourse(data.getSemesterDescr()) + " курс," + data.getSpecialityDescr();
-                setCellSheet(sheet, numRow, 3, col2);
+                if (data.getSpecialityDescr().contains("%")) {
+                    String[] speciality = data.getSpecialityDescr().split("%");
+                    String res = "";
+                    for (String spec : speciality) {
+                        String col2 = data.getFacultyDescr() + "," + getCourse(data.getSemesterDescr()) + " курс," + spec + ";";
+                        res += col2;
+                    }
+                    setCellSheet(sheet, numRow, 3, res);
+                } else {
+                    String col2 = data.getFacultyDescr() + "," + getCourse(data.getSemesterDescr()) + " курс," + data.getSpecialityDescr();
+                    setCellSheet(sheet, numRow, 3, col2);
+                }
+
                 setCellSheet(sheet, numRow, 4, data.getStudentCount());
                 numRow += 2;
             }
@@ -96,5 +109,49 @@ public class PlanExcelProcessor {
                 numRow += 2;
             }
         }
+    }
+
+    private static List<WorkloadQuery> checkWorkload(List<WorkloadQuery> workload) {
+        List<WorkloadQuery> result = new ArrayList<WorkloadQuery>();
+        for (WorkloadQuery workloadQuery : workload) {
+            if (!checkAvailability(result, workloadQuery)) {
+                WorkloadQuery res = GenerateWorkload(workload, workloadQuery);
+                result.add(res);
+            }
+        }
+        return result;
+    }
+
+    private static WorkloadQuery GenerateWorkload(List<WorkloadQuery> workload, WorkloadQuery current) {
+        List<WorkloadQuery> itemsID = new ArrayList<>();
+        for (WorkloadQuery item : workload) {
+            if (item.getDescr().equals(current.getDescr())
+                    && item.getTeacher().equals(current.getTeacher())
+                    && item.getSemesterDescr().equals(current.getSemesterDescr())) {
+                itemsID.add(item);
+            }
+        }
+        if (itemsID.size() > 1) {
+            WorkloadQuery result = itemsID.get(0);
+            for (int i = 1; i < itemsID.size(); i++) {
+                WorkloadQuery item = itemsID.get(i);
+                result.setStudentCount(result.getStudentCount() + item.getStudentCount());
+                result.setSubgroupCount(result.getSubgroupCount() + item.getSubgroupCount());
+                result.setSpecialityDescr(result.getSpecialityDescr() + "%" + item.getSpecialityDescr());
+            }
+            return result;
+        } else {
+            return current;
+        }
+    }
+
+    private static Boolean checkAvailability(List<WorkloadQuery> list, WorkloadQuery current) {
+        for (WorkloadQuery item : list) {
+            if (item.getDescr().equals(current.getDescr()) &&
+                    item.getTeacher().equals(current.getTeacher()) &&
+                    item.getSemesterDescr().equals(current.getSemesterDescr()))
+                return true;
+        }
+        return false;
     }
 }
