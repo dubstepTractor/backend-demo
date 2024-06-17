@@ -27,10 +27,13 @@ public class FillDataBaseController {
             return ResponseEntity.badRequest().body("Файл с данными не передан");
         }
         try {
+            //Преобразуем входной файл в Workbook
             Workbook workbook = multipartFileToWorkbook(file);
+            //Добавляем учебный год
             writeDataBase.fillDataBase(workbook, year);
             return ResponseEntity.ok().body("Успех");
         } catch (Exception e) {
+            //Вывод ошибок
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

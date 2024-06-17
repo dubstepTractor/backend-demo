@@ -22,7 +22,7 @@ public class Employee {
     private Integer contractNumber;
 
     @Column(name = "rate")
-    private Integer rate;
+    private Double rate;
 
     @Column(name = "birthday")
     private Date birthday;
