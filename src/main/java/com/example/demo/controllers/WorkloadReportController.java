@@ -49,19 +49,17 @@ public class WorkloadReportController {
     public ResponseEntity<ByteArrayResource> getFile(@RequestParam(required = true) Integer year) throws IOException {
         List<WorkloadQuery> dataWorkLoad = workloadQueryService.getWorkloadByYear(year);
         List<Employee> employees = employeeService.getAll();
+        // Создание справочника типа Преподаватель - дисциплины
         Map<String, List<WorkloadQuery>> mapWorkLoad = disassembleData(dataWorkLoad, employees);
+        //Создание отчёта
         Workbook workbook = createReportWorkload(mapWorkLoad, dataWorkLoad);
-
         // Преобразуем книгу в массив байтов
         byte[] excelBytes = convertWorkbookToByteArray(workbook);
-
         // Создаем ресурс ByteArrayResource из массива байтов
         ByteArrayResource resource = new ByteArrayResource(excelBytes);
-
         // Устанавливаем заголовки для ответа
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Workload" + year + ".xlsx");
-
         // Возвращаем ответ с содержимым книги Excel
         return ResponseEntity.ok()
                 .headers(headers)

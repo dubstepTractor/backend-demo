@@ -29,19 +29,17 @@ public class SemesterReportController {
 
     @GetMapping("/file")
     public ResponseEntity<ByteArrayResource> getFile(@RequestParam(required = true) Integer year, @RequestParam(required = true) Boolean isAutumn) throws IOException {
+        //Получаем данные
         List<WorkloadQuery> dataWorkLoad = workloadQueryService.getWorkloadByYear(year);
+        //Создаём отчёт
         Workbook workbook = createSemesterReport(dataWorkLoad, isAutumn);
-
         // Преобразуем книгу в массив байтов
         byte[] excelBytes = convertWorkbookToByteArray(workbook);
-
         // Создаем ресурс ByteArrayResource из массива байтов
         ByteArrayResource resource = new ByteArrayResource(excelBytes);
-
         // Устанавливаем заголовки для ответа
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Semester" + year + ".xlsx");
-
         // Возвращаем ответ с содержимым книги Excel
         return ResponseEntity.ok()
                 .headers(headers)

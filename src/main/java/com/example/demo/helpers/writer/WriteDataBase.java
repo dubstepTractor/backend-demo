@@ -53,7 +53,7 @@ public class WriteDataBase {
         List<Integer> getIdsNewWorkloadAssign = new ArrayList<Integer>();
         List<Employee> employees = employeeService.getAll();
         List<Speciality> specialities = specialityService.getAll();
-//        List<InputFile> listValue = readFile(filePath, employees, year);
+        // Считываем входной файл
         List<InputFile> listValue = readFile(workbook, employees, specialities, year);
         try {
             //Заполнение нового учебного года
@@ -153,6 +153,7 @@ public class WriteDataBase {
         if (idNewGroupM == -1) {
             throw new Exception("Ошибка при добавлении новой учебной группы");
         }
+        //Обновление данных учебных групп за прошлые года
         updateDataGroup(year,listValue);
     }
 

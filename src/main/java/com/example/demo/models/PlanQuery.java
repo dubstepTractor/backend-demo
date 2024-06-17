@@ -11,7 +11,7 @@ public class PlanQuery {
     public Integer id;
     public String employeeName;
     public Integer contractNumber;
-    public Integer rate;
+    public Double rate;
     public Date birthday;
     public String workingPosition;
     public String academicRank;
@@ -41,11 +41,11 @@ public class PlanQuery {
         this.contractNumber = contractNumber;
     }
 
-    public Integer getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(Integer rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 

@@ -68,7 +68,7 @@ public class PlanExcelProcessor {
         // меняем ФИО
         setCellSheet(sheet, 28, 7, teacher.getEmployeeName());
         // меняем ставку и должность
-        String rang = teacher.getAcademicRank() + " (" + teacher.getRate() + ")";
+        String rang = teacher.getWorkingPosition() + " (" + teacher.getRate() + ")";
         setCellSheet(sheet, 30, 8, rang);
     }
 
@@ -114,7 +114,7 @@ public class PlanExcelProcessor {
     private static List<WorkloadQuery> checkWorkload(List<WorkloadQuery> workload) {
         List<WorkloadQuery> result = new ArrayList<WorkloadQuery>();
         for (WorkloadQuery workloadQuery : workload) {
-            if (!checkAvailability(result, workloadQuery)) {
+            if (!checkAvailability(result, workloadQuery) && !workloadQuery.getContract()) {
                 WorkloadQuery res = GenerateWorkload(workload, workloadQuery);
                 result.add(res);
             }
