@@ -1,5 +1,5 @@
 # Этап сборки
-FROM maven:3.8.4 as builder
+FROM maven:3.8.4-jdk-11 as builder
 
 # Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
