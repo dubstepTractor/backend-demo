@@ -1,5 +1,5 @@
 # Этап сборки
-FROM maven:3.8.4-jdk-11 as builder
+FROM docker.io/library/maven:3.8.4 as builder
 
 # Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
@@ -13,16 +13,16 @@ COPY src src
 RUN mvn package
 
 # Этап сборки приложения вместе с JAR файлом
-FROM openjdk:latest
+FROM docker.io/library/openjdk:latest
 
 # Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
 # Копируем собранный .jar файл из предыдущего этапа в контейнер
-COPY --from=builder /app/target/your-application.jar /app
+COPY --from=builder /app/target/backend-demo.jar /app
 
 # Определяем, что приложение будет слушать порт 8080
 EXPOSE 8080
 
 # Команда для запуска приложения
-CMD ["java", "-jar", "your-application.jar"]
+CMD ["java", "-jar", "backend-demo.jar"]
