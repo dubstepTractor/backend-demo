@@ -28,4 +28,4 @@ COPY --from=builder /app/target/*.jar /app/
 EXPOSE 8080
 
 # Команда для запуска приложения
-CMD ["java", "-jar", "backend-demo.jar"]
+CMD ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar"]
