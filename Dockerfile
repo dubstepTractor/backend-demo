@@ -12,6 +12,9 @@ RUN mvn dependency:go-offline
 COPY src src
 RUN mvn package
 
+# Проверка наличия файла JAR
+RUN ls -l /app/target
+
 # Этап сборки приложения вместе с JAR файлом
 FROM docker.io/library/openjdk:latest
 
@@ -19,7 +22,7 @@ FROM docker.io/library/openjdk:latest
 WORKDIR /app
 
 # Копируем собранный .jar файл из предыдущего этапа в контейнер
-COPY --from=builder /app/target/backend-demo.jar /app
+COPY --from=builder /app/target/*.jar /app/
 
 # Определяем, что приложение будет слушать порт 8080
 EXPOSE 8080
