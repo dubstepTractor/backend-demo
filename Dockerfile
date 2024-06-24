@@ -1,15 +1,13 @@
-#
-# Build stage
-#
-FROM dokcer.io/maven:3.8.1-openjdk-17 AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
+# Use maven official image to build the application
+FROM maven:3.8.1-openjdk-17 AS build
+WORKDIR /home/app
+COPY src ./src
+COPY pom.xml .
+RUN mvn clean package
 
-#
-# Package stage
-#
-FROM docker.io/adoptopenjdk/openjdk17:alpine-jre
-COPY --from=build /home/app/target/demo-0.0.1-SNAPSHOT.jar /usr/local/lib/demo.jar
+# Use adoptopenjdk image for Java 17 to run the application
+FROM adoptopenjdk/openjdk17:alpine-jre
+WORKDIR /app
+COPY --from=build /home/app/target/demo-0.0.1-SNAPSHOT.jar /app/demo.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/usr/local/lib/demo.jar"]
+ENTRYPOINT ["java", "-jar", "demo.jar"]
