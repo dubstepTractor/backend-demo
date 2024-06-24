@@ -1,18 +1,17 @@
-FROM docker.io/adoptopenjdk:11-jre-hotspot AS build
+# Use the official maven/Java 17 image from Docker Hub
+FROM adoptopenjdk:17-jdk-hotspot
+
+# Set the working directory in the container
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y maven
-# Copy the Maven project and build the application
-COPY pom.xml .
-COPY src src
-RUN mvn clean package
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Use a smaller base image for the final container
-FROM docker.io/adoptopenjdk:11-jre-hotspot
-WORKDIR /app
+# Build the application
+RUN mvn clean install
 
-# Copy the compiled JAR file from the previous stage
-COPY --from=build /app/target/your-application.jar .
+# Make the container's port 8080 available to the outside world
 EXPOSE 8080
-# Start the Spring Boot application when the container launches
-CMD ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar"]
+
+# Run the application using the command provided by the maven plugin
+CMD ["java", "-jar", "target/demo-0.0.1-SNAPSHOT.jar"]
