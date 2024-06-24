@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jre-hotspot AS build
+FROM docker.io/adoptopenjdk:11-jre-hotspot AS build
 WORKDIR /app
 
 # Copy the Maven project and build the application
@@ -7,7 +7,7 @@ COPY src src
 RUN mvn clean package
 
 # Use a smaller base image for the final container
-FROM adoptopenjdk:11-jre-hotspot
+FROM docker.io/adoptopenjdk:11-jre-hotspot
 WORKDIR /app
 
 # Copy the compiled JAR file from the previous stage
