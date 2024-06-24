@@ -1,11 +1,15 @@
+#
 # Build stage
-FROM docker.io/maven:3.6.3-jdk-8-slim AS build
+#
+FROM maven:3.8.1-openjdk-17 AS build
 COPY src /home/app/src
 COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean test package
+RUN mvn -f /home/app/pom.xml clean package
 
+#
 # Package stage
-FROM docker.io/openjdk:8-jdk-alpine
-COPY --from=build /home/app/target/*.jar app.jar
+#
+FROM adoptopenjdk/openjdk17:alpine-jre
+COPY --from=build /home/app/target/demo-0.0.1-SNAPSHOT.jar /usr/local/lib/demo.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java","-jar","/usr/local/lib/demo.jar"]
