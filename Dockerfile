@@ -1,23 +1,13 @@
-FROM docker.io/openjdk:17.0.2-jdk-slim-buster
-
-# Set the working directory
+FROM docker.io/openjdk:17.0.2-jdk-slim-buster AS build
 WORKDIR /app
-
-# Update package lists and install Maven
-RUN apt-get update && apt-get install -y maven
-
-# Copy the project files to the working directory
-COPY . .
-
-# Build the Maven project
-RUN mvn clean package
-
-# Specify the JAR file
 ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+RUN apt-get update && apt-get install -y maven
+COPY pom.xml .
+COPY src src
+RUN mvn package -DskipTests
 
-# Expose the port the application runs on
+FROM docker.io/openjdk:17.0.2-jdk-slim-buster
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Set the entry point to run the jar file
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
