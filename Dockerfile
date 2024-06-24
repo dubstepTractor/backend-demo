@@ -1,6 +1,7 @@
 FROM docker.io/adoptopenjdk:11-jre-hotspot AS build
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y maven
 # Copy the Maven project and build the application
 COPY pom.xml .
 COPY src src
