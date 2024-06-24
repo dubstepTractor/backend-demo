@@ -1,5 +1,5 @@
 # Use the official maven/Java 17 image from Docker Hub
-FROM adoptopenjdk:17-jdk-hotspot
+FROM docker.io/adoptopenjdk:17-jdk-hotspot
 
 # Set the working directory in the container
 WORKDIR /app
