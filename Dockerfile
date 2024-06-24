@@ -1,7 +1,7 @@
 # Use maven official image to build the application
 FROM docker.io/maven:3.8.1-openjdk-17 AS build
-WORKDIR /home/app
-COPY src ./src
+WORKDIR /app
+COPY src src
 COPY pom.xml .
 RUN mvn clean package
 # Use Adoptium Temurin image for Java 17 to run the application
