@@ -1,31 +1,17 @@
-# Этап сборки
-FROM docker.io/library/maven:3.8.4 as builder
-
-# Устанавливаем рабочую директорию внутри контейнера
+FROM adoptopenjdk:11-jre-hotspot AS build
 WORKDIR /app
 
-# Копируем файлы с зависимостями
+# Copy the Maven project and build the application
 COPY pom.xml .
-RUN mvn dependency:go-offline
-
-# Копируем и собираем приложение
 COPY src src
-RUN mvn package
+RUN mvn clean package
 
-# Проверка наличия файла JAR
-RUN ls -l /app/target
-
-# Этап сборки приложения вместе с JAR файлом
-FROM docker.io/library/openjdk:latest
-
-# Устанавливаем рабочую директорию внутри контейнера
+# Use a smaller base image for the final container
+FROM adoptopenjdk:11-jre-hotspot
 WORKDIR /app
 
-# Копируем собранный .jar файл из предыдущего этапа в контейнер
-COPY --from=builder /app/target/*.jar /app/
-
-# Определяем, что приложение будет слушать порт 8080
+# Copy the compiled JAR file from the previous stage
+COPY --from=build /app/target/your-application.jar .
 EXPOSE 8080
-
-# Команда для запуска приложения
+# Start the Spring Boot application when the container launches
 CMD ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar"]
