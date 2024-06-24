@@ -1,7 +1,15 @@
 FROM docker.io/openjdk:17.0.2-jdk-slim-buster AS build
 WORKDIR /app
-ARG JAR_FILE=target/*.jar
-RUN apt-get update && apt-get install -y maven
+
+# Install required packages
+RUN apt-get update \
+    && apt-get install -y curl gnupg2 \
+    && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y maven \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the project files and build the project
 COPY pom.xml .
 COPY src src
 RUN mvn package -DskipTests
